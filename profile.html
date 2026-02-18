@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js/js.js"></script>
+    <script src="js/jsv.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+    /* ================= ROOT ================= */
+
+    :root {
+        --sidebar-width: 170px;
+        --sidebar-collapsed-width: 75px;
+        --layout-gap: 16px;
+        --transition: .3s ease;
+    }
+
+    /* ================= BASE ================= */
+
+    body {
+        background: #f8f9fa;
+        color: #212529;
+        transition: var(--transition);
+        overflow-x: hidden;
+    }
+
+    /* ================= SIDEBAR ================= */
+
+    .sidebar {
+        width: var(--sidebar-width);
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: #ffffff;
+        border-right: 1px solid #dee2e6;
+        padding: 20px 12px;
+        transition: var(--transition);
+        z-index: 1000;
+    }
+
+    .sidebar.collapsed {
+        width: var(--sidebar-collapsed-width);
+    }
+
+    .sidebar.collapsed .link-text,
+    .sidebar.collapsed h4 {
+        display: none;
+    }
+
+    .sidebar.collapsed .nav-link {
+        justify-content: center;
+        padding: 12px 0;
+    }
+
+    .sidebar .nav-link {
+        color: #495057;
+        padding: 12px 15px;
+        border-radius: 8px;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: var(--transition);
+    }
+
+    .sidebar .nav-link i {
+        font-size: 1.25rem;
+        min-width: 35px;
+    }
+
+    .sidebar .nav-link:hover {
+        background: #f1f3f5;
+        color: #000;
+    }
+
+    .sidebar .nav-link.active {
+        background: #0d6efd;
+        color: #fff;
+    }
+
+    /* ================= NAVBAR ================= */
+
+    .navbar {
+        background: #ffffff;
+        border-bottom: 1px solid #dee2e6;
+        z-index: 999;
+        transition: var(--transition);
+        margin-left: calc(var(--sidebar-width) + var(--layout-gap));
+        padding: 10px 14px;
+    }
+
+    /* ================= CONTENT ================= */
+
+    .content {
+        margin-left: calc(var(--sidebar-width) + var(--layout-gap));
+        padding: 20px;
+        margin-top: var(--layout-gap);
+        transition: var(--transition);
+    }
+
+    /* collapsed spacing */
+
+    .collapsed-margin {
+        margin-left: calc(var(--sidebar-collapsed-width) + var(--layout-gap)) !important;
+    }
+
+    /* ================= CARDS ================= */
+
+    .card {
+        border-radius: 12px;
+        border: none;
+        transition: var(--transition);
+    }
+
+    /* ================= TABLE ================= */
+
+    .table {
+        background: #ffffff;
+        border-radius: 8px;
+        transition: var(--transition);
+    }
+
+    .table thead {
+        background: #f1f3f5;
+    }
+
+    .table-hover tbody tr:hover {
+        background: #f8f9fa;
+    }
+
+    /* ================= FORMS ================= */
+
+    .form-control {
+        border-radius: 8px;
+        transition: var(--transition);
+    }
+
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #0d6efd;
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 991px) {
+
+        .navbar,
+        .content {
+            margin-left: 0 !important;
+        }
+
+        .content {
+            padding: 15px;
+        }
+
+        .sidebar {
+            left: -100%;
+        }
+
+        .sidebar.mobile-show {
+            left: 0;
+        }
+    }
+
+    /* ================= DARK MODE ================= */
+
+    body.dark-mode {
+        background: #121212;
+        color: #e0e0e0;
+    }
+
+    .dark-mode strong,
+    .dark-mode small,
+    .dark-mode .text-muted {
+        color: #e0e0e0 !important;
+    }
+
+    /* Sidebar */
+
+    .dark-mode .sidebar {
+        background: #1a1a1a;
+        border-color: #2c2c2c;
+    }
+
+    .dark-mode .sidebar .nav-link {
+        color: #cfcfcf;
+    }
+
+    .dark-mode .sidebar .nav-link:hover {
+        background: #2a2a2a;
+        color: #ffffff;
+    }
+
+    .dark-mode .sidebar .nav-link.active {
+        background: #0d6efd;
+        color: #fff;
+    }
+
+    /* Navbar */
+
+    .dark-mode .navbar {
+        background: #1a1a1a;
+        border-color: #2c2c2c;
+    }
+
+    /* Cards */
+
+    .dark-mode .card {
+        background: #1e1e1e;
+        color: #e6e6e6;
+    }
+
+    /* Tables */
+
+    .dark-mode .table {
+        background: #1a1a1a;
+        color: #e6e6e6;
+    }
+
+    .dark-mode .table thead {
+        background: #262626;
+        color: #e6e6e6;
+    }
+
+    .dark-mode .table td,
+    .dark-mode .table th {
+        border-color: #333;
+        background: #1a1a1a;
+        color: #e6e6e6;
+    }
+
+    .dark-mode .table-hover tbody tr:hover {
+        background: #2a2a2a;
+    }
+
+    /* Forms */
+
+    .dark-mode .form-control {
+        background: #2b2b2b;
+        border-color: #444;
+        color: #ffffff;
+    }
+
+    .dark-mode .form-control:focus {
+        background: #2b2b2b;
+        border-color: #0d6efd;
+        color: #ffffff;
+    }
+
+    /* Modal */
+
+    .dark-mode .modal-content {
+        background: #1e1e1e;
+        color: #e6e6e6;
+    }
+
+    .dark-mode .modal-header,
+    .dark-mode .modal-footer {
+        border-color: #333;
+    }
+
+    /* Dropdown */
+
+    .dark-mode .dropdown-menu {
+        background: #1f1f1f;
+        border-color: #333;
+    }
+
+    .dark-mode .dropdown-item {
+        color: #ddd;
+    }
+
+    .dark-mode .dropdown-item:hover {
+        background: #2a2a2a;
+        color: #fff;
+    }
+
+    /* Buttons */
+
+    .dark-mode .btn-outline-secondary {
+        color: #bbb;
+        border-color: #555;
+    }
+
+    /* Inputs inside dark container */
+
+    .dark-mode #dark input,
+    .dark-mode #dark select,
+    .dark-mode #dark textarea {
+        background-color: #2d2d2d;
+        border: 1px solid #444;
+        color: #ffffff;
+    }
+
+    .dark-mode #dark input:focus {
+        background-color: #333;
+        border-color: #4e73df;
+        outline: none;
+        box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+    }
+
+    /* Placeholder */
+
+    .dark-mode input::placeholder,
+    .dark-mode textarea::placeholder {
+        color: #bbbbbb !important;
+        opacity: 1;
+    }
+
+    /* Scrollbar */
+
+    .dark-mode ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .dark-mode ::-webkit-scrollbar-thumb {
+        background: #333;
+        border-radius: 10px;
+    }
+    </style>
+
+
+</head>
+
+<body>
+    <div class="sidebar" id="sidebar">
+        <h4 class="px-3 mb-4 text-primary fw-bold text-uppercase">Admin</h4>
+
+        <ul class="nav flex-column">
+            <li>
+                <a href="home.php" class="nav-link">
+                    <i class="bi bi-house"></i>
+                    <span class="link-text">Home</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="customer.php" class="nav-link">
+                    <i class="bi bi-people"></i>
+                    <span class="link-text">Customers</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="product.php" class="nav-link">
+                    <i class="bi bi-box"></i>
+                    <span class="link-text">Products</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="order.php" class="nav-link">
+                    <i class="bi bi-cart"></i>
+                    <span class="link-text">Orders</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="offer.php" class="nav-link">
+                    <i class="bi bi-tag"></i>
+                    <span class="link-text">Offers</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="payment.php" class="nav-link">
+                    <i class="bi bi-credit-card"></i>
+                    <span class="link-text">Payments</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="notification.php" class="nav-link">
+                    <i class="bi bi-bell"></i>
+                    <span class="link-text">Notifications</span>
+                </a>
+            </li>
+
+
+            <li class="mt-4">
+                <a href="login.php" class="nav-link text-danger">
+                    <i class="bi bi-box-arrow-left"></i>
+                    <span class="link-text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+
+    <nav class="navbar sticky-top px-3 py-2 shadow-sm" id="navbar">
+        <div class="container-fluid">
+
+            <!-- sidebar button and search button -->
+            <div class="d-flex align-items-center gap-2">
+
+                <!-- sidebar button -->
+                <button class="btn btn-light border" id="toggle-btn">
+                    <i class="bi bi-list"></i>
+                </button>
+
+                <input class="form-control d-none d-md-block" placeholder="Search..." style="max-width:250px;">
+            </div>
+
+
+            <div class="d-flex align-items-center gap-3">
+
+                <!-- dark button -->
+                <button class="btn btn-light border" onclick="toggleDark()">
+                    <i class="bi bi-moon-stars"></i>
+                </button>
+
+                <!-- profile bitton -->
+                <div class="dropdown">
+
+                    <button class="btn p-0 border-0 bg-transparent dropdown-toggle d-flex align-items-center"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+
+                        <img src="image/sandiyo.jpg" width="40" height="40" class="rounded-circle border" alt="Profile">
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow">
+
+                        <li class="px-3 py-2">
+                            <strong>Chirag Ahir</strong><br>
+                            <small class="text-muted">admin@gmail.com</small>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" href="profile.php">
+                                <i class="bi bi-person me-2"></i>
+                                My Profile
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" href="settings.php">
+                                <i class="bi bi-gear me-2"></i>
+                                Settings
+                            </a>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item text-danger" href="logout.php">
+                                <i class="bi bi-box-arrow-right me-2"></i>
+                                Logout
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+
+
+            </div>
+
+        </div>
+    </nav>
+
+
+    <div class="content">
+        <style>
+.profile-card {
+    border-radius: 20px;
+    overflow: hidden;
+    border: none;
+}
+
+.profile-header {
+    background: linear-gradient(135deg, #0d6efd 0%, #00d4ff 100%);
+    height: 120px;
+}
+
+.profile-img-wrapper {
+    margin-top: -60px;
+}
+
+/* fix outline-dark in dark mode */
+.dark-mode .dark-btn {
+    border-color: #ccc;
+    color: #eee;
+}
+
+.dark-mode .dark-btn:hover {
+    background: #eee;
+    color: #000;
+}
+
+.profile-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border: 5px solid white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.info-label {
+    color: #6c757d;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* validation */
+label.error {
+    font-size: 13px;
+    color: #dc3545;
+    margin-top: 5px;
+}
+
+/* dark mode support */
+.dark-mode .profile-card {
+    background: #1e1e1e;
+    color: #e6e6e6;
+}
+
+.dark-mode .info-label {
+    color: #aaa;
+}
+</style>
+
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="card profile-card shadow">
+                <div class="profile-header"></div>
+
+                <div class="card-body p-4 text-center">
+
+                    <div class="profile-img-wrapper mb-3">
+                        <img src="image/sandiyo.jpg" class="rounded-circle profile-img" id="displayPic">
+                    </div>
+
+                    <h3 class="fw-bold mb-0" id="displayName">Chirag Ahir</h3>
+                    <p class="text-muted mb-4">System Administrator</p>
+
+                    <div class="row text-start g-4 mb-4">
+                        <div class="col-md-6 border-end">
+                            <label class="info-label d-block">Email Address</label>
+                            <span class="fw-bold" id="displayEmail">chirag@admin.com</span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="info-label d-block">Phone Number</label>
+                            <span class="fw-bold" id="displayPhone">+91 98765 43210</span>
+                        </div>
+
+                        <div class="col-md-6 border-end">
+                            <label class="info-label d-block">Location</label>
+                            <span class="fw-bold">Rajkot, Gujarat</span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="info-label d-block">Member Since</label>
+                            <span class="fw-bold">Jan 2026</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3 justify-content-center">
+                        <button class="btn btn-primary px-4" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                            <i class="bi bi-pencil-square me-2"></i>Edit Profile
+                        </button>
+
+                        <button class="btn btn-outline-dark px-4 dark-btn" data-bs-toggle="modal"
+                            data-bs-target="#passwordModal">
+                            <i class="bi bi-shield-lock me-2"></i>Security
+                        </button>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- ================= EDIT PROFILE MODAL ================= -->
+
+<div class="modal fade" id="editProfileModal">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 shadow">
+
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Edit Profile Details</h5>
+                <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <form id="editForm">
+
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" name="editName" id="editName" class="form-control" value="Chirag Ahir">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="editEmail" id="editEmail" class="form-control"
+                            value="chirag@admin.com">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Phone</label>
+                        <input type="text" name="editPhone" id="editPhone" class="form-control" value="+91 98765 43210">
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary" onclick="updateProfile()">Save Changes</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- ================= PASSWORD MODAL ================= -->
+
+<div class="modal fade" id="passwordModal">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content border-0 shadow">
+
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title">Change Password</h5>
+                <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <form id="passForm">
+
+                    <div class="mb-3">
+                        <label class="form-label">New Password</label>
+                        <input type="password" name="newPass" id="newPass" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Confirm Password</label>
+                        <input type="password" name="confirmPass" id="confirmPass" class="form-control">
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer border-0">
+                <button class="btn btn-dark w-100" onclick="updatePassword()">
+                    Update Password
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- ================= VALIDATION ================= -->
+
+<script>
+/* password match rule */
+$.validator.addMethod("matchPass", function(value) {
+    return value === $("#newPass").val();
+}, "Passwords do not match");
+
+
+$("#editForm").validate({
+    rules: {
+        editName: {
+            required: true,
+            minlength: 3
+        },
+        editEmail: {
+            required: true,
+            email: true
+        },
+        editPhone: {
+            required: true,
+            minlength: 10
+        }
+    },
+    errorClass: "is-invalid",
+    validClass: "is-valid"
+});
+
+
+$("#passForm").validate({
+    rules: {
+        newPass: {
+            required: true,
+            minlength: 6
+        },
+        confirmPass: {
+            required: true,
+            matchPass: true
+        }
+    },
+    errorClass: "is-invalid",
+    validClass: "is-valid"
+});
+</script>
+
+
+<!-- ================= ACTIONS ================= -->
+
+<script>
+function updateProfile() {
+
+    if (!$("#editForm").valid()) return;
+
+    displayName.innerText = editName.value;
+    displayEmail.innerText = editEmail.value;
+    displayPhone.innerText = editPhone.value;
+
+    bootstrap.Modal.getInstance(
+        document.getElementById('editProfileModal')
+    ).hide();
+}
+
+
+function updatePassword() {
+
+    if (!$("#passForm").valid()) return;
+
+    bootstrap.Modal.getInstance(
+        document.getElementById('passwordModal')
+    ).hide();
+
+    document.getElementById("passForm").reset();
+}
+</script>
+<script>
+const sidebar = document.getElementById('sidebar');
+const navbar = document.getElementById('navbar');
+const content = document.querySelector('.content');
+const toggleBtn = document.getElementById('toggle-btn');
+const darkBtnIcon = document.querySelector('[onclick="toggleDark()"] i');
+
+/* ================= RESTORE THEME ================= */
+
+(function() {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+        document.body.classList.add("dark-mode");
+        if (darkBtnIcon) darkBtnIcon.className = "bi bi-sun";
+    }
+})();
+
+/* ================= MENU TOGGLE ================= */
+
+if (toggleBtn && sidebar) {
+    toggleBtn.addEventListener('click', () => {
+
+        // mobile
+        if (window.innerWidth < 992) {
+            sidebar.classList.toggle('mobile-show');
+            return;
+        }
+
+        // desktop
+        sidebar.classList.toggle('collapsed');
+        navbar && navbar.classList.toggle('collapsed-margin');
+        content && content.classList.toggle('collapsed-margin');
+    });
+}
+
+/* ================= AUTO CLOSE MOBILE SIDEBAR ================= */
+
+document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth < 992 && sidebar) {
+            sidebar.classList.remove('mobile-show');
+        }
+    });
+});
+
+/* ================= DARK MODE TOGGLE ================= */
+
+function toggleDark() {
+    document.body.classList.toggle('dark-mode');
+
+    if (document.body.classList.contains('dark-mode')) {
+        localStorage.setItem("theme", "dark");
+        if (darkBtnIcon) darkBtnIcon.className = "bi bi-sun";
+    } else {
+        localStorage.setItem("theme", "light");
+        if (darkBtnIcon) darkBtnIcon.className = "bi bi-moon-stars";
+    }
+}
+
+/* ================= WINDOW RESIZE FIX ================= */
+
+window.addEventListener('resize', () => {
+    if (window.innerWidth >= 992 && sidebar) {
+        sidebar.classList.remove('mobile-show');
+    }
+});
+</script>
+
+</div>
+</body>
+
+</html>

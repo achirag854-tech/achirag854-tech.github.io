@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js/js.js"></script>
+    <script src="js/jsv.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+    /* ================= ROOT ================= */
+
+    :root {
+        --sidebar-width: 170px;
+        --sidebar-collapsed-width: 75px;
+        --layout-gap: 16px;
+        --transition: .3s ease;
+    }
+
+    /* ================= BASE ================= */
+
+    body {
+        background: #f8f9fa;
+        color: #212529;
+        transition: var(--transition);
+        overflow-x: hidden;
+    }
+
+    /* ================= SIDEBAR ================= */
+
+    .sidebar {
+        width: var(--sidebar-width);
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: #ffffff;
+        border-right: 1px solid #dee2e6;
+        padding: 20px 12px;
+        transition: var(--transition);
+        z-index: 1000;
+    }
+
+    .sidebar.collapsed {
+        width: var(--sidebar-collapsed-width);
+    }
+
+    .sidebar.collapsed .link-text,
+    .sidebar.collapsed h4 {
+        display: none;
+    }
+
+    .sidebar.collapsed .nav-link {
+        justify-content: center;
+        padding: 12px 0;
+    }
+
+    .sidebar .nav-link {
+        color: #495057;
+        padding: 12px 15px;
+        border-radius: 8px;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: var(--transition);
+    }
+
+    .sidebar .nav-link i {
+        font-size: 1.25rem;
+        min-width: 35px;
+    }
+
+    .sidebar .nav-link:hover {
+        background: #f1f3f5;
+        color: #000;
+    }
+
+    .sidebar .nav-link.active {
+        background: #0d6efd;
+        color: #fff;
+    }
+
+    /* ================= NAVBAR ================= */
+
+    .navbar {
+        background: #ffffff;
+        border-bottom: 1px solid #dee2e6;
+        z-index: 999;
+        transition: var(--transition);
+        margin-left: calc(var(--sidebar-width) + var(--layout-gap));
+        padding: 10px 14px;
+    }
+
+    /* ================= CONTENT ================= */
+
+    .content {
+        margin-left: calc(var(--sidebar-width) + var(--layout-gap));
+        padding: 20px;
+        margin-top: var(--layout-gap);
+        transition: var(--transition);
+    }
+
+    /* collapsed spacing */
+
+    .collapsed-margin {
+        margin-left: calc(var(--sidebar-collapsed-width) + var(--layout-gap)) !important;
+    }
+
+    /* ================= CARDS ================= */
+
+    .card {
+        border-radius: 12px;
+        border: none;
+        transition: var(--transition);
+    }
+
+    /* ================= TABLE ================= */
+
+    .table {
+        background: #ffffff;
+        border-radius: 8px;
+        transition: var(--transition);
+    }
+
+    .table thead {
+        background: #f1f3f5;
+    }
+
+    .table-hover tbody tr:hover {
+        background: #f8f9fa;
+    }
+
+    /* ================= FORMS ================= */
+
+    .form-control {
+        border-radius: 8px;
+        transition: var(--transition);
+    }
+
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #0d6efd;
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 991px) {
+
+        .navbar,
+        .content {
+            margin-left: 0 !important;
+        }
+
+        .content {
+            padding: 15px;
+        }
+
+        .sidebar {
+            left: -100%;
+        }
+
+        .sidebar.mobile-show {
+            left: 0;
+        }
+    }
+
+    /* ================= DARK MODE ================= */
+
+    body.dark-mode {
+        background: #121212;
+        color: #e0e0e0;
+    }
+
+    .dark-mode strong,
+    .dark-mode small,
+    .dark-mode .text-muted {
+        color: #e0e0e0 !important;
+    }
+
+    /* Sidebar */
+
+    .dark-mode .sidebar {
+        background: #1a1a1a;
+        border-color: #2c2c2c;
+    }
+
+    .dark-mode .sidebar .nav-link {
+        color: #cfcfcf;
+    }
+
+    .dark-mode .sidebar .nav-link:hover {
+        background: #2a2a2a;
+        color: #ffffff;
+    }
+
+    .dark-mode .sidebar .nav-link.active {
+        background: #0d6efd;
+        color: #fff;
+    }
+
+    /* Navbar */
+
+    .dark-mode .navbar {
+        background: #1a1a1a;
+        border-color: #2c2c2c;
+    }
+
+    /* Cards */
+
+    .dark-mode .card {
+        background: #1e1e1e;
+        color: #e6e6e6;
+    }
+
+    /* Tables */
+
+    .dark-mode .table {
+        background: #1a1a1a;
+        color: #e6e6e6;
+    }
+
+    .dark-mode .table thead {
+        background: #262626;
+        color: #e6e6e6;
+    }
+
+    .dark-mode .table td,
+    .dark-mode .table th {
+        border-color: #333;
+        background: #1a1a1a;
+        color: #e6e6e6;
+    }
+
+    .dark-mode .table-hover tbody tr:hover {
+        background: #2a2a2a;
+    }
+
+    /* Forms */
+
+    .dark-mode .form-control {
+        background: #2b2b2b;
+        border-color: #444;
+        color: #ffffff;
+    }
+
+    .dark-mode .form-control:focus {
+        background: #2b2b2b;
+        border-color: #0d6efd;
+        color: #ffffff;
+    }
+
+    /* Modal */
+
+    .dark-mode .modal-content {
+        background: #1e1e1e;
+        color: #e6e6e6;
+    }
+
+    .dark-mode .modal-header,
+    .dark-mode .modal-footer {
+        border-color: #333;
+    }
+
+    /* Dropdown */
+
+    .dark-mode .dropdown-menu {
+        background: #1f1f1f;
+        border-color: #333;
+    }
+
+    .dark-mode .dropdown-item {
+        color: #ddd;
+    }
+
+    .dark-mode .dropdown-item:hover {
+        background: #2a2a2a;
+        color: #fff;
+    }
+
+    /* Buttons */
+
+    .dark-mode .btn-outline-secondary {
+        color: #bbb;
+        border-color: #555;
+    }
+
+    /* Inputs inside dark container */
+
+    .dark-mode #dark input,
+    .dark-mode #dark select,
+    .dark-mode #dark textarea {
+        background-color: #2d2d2d;
+        border: 1px solid #444;
+        color: #ffffff;
+    }
+
+    .dark-mode #dark input:focus {
+        background-color: #333;
+        border-color: #4e73df;
+        outline: none;
+        box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+    }
+
+    /* Placeholder */
+
+    .dark-mode input::placeholder,
+    .dark-mode textarea::placeholder {
+        color: #bbbbbb !important;
+        opacity: 1;
+    }
+
+    /* Scrollbar */
+
+    .dark-mode ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .dark-mode ::-webkit-scrollbar-thumb {
+        background: #333;
+        border-radius: 10px;
+    }
+    </style>
+
+
+</head>
+
+<body>
+    <div class="sidebar" id="sidebar">
+        <h4 class="px-3 mb-4 text-primary fw-bold text-uppercase">Admin</h4>
+
+        <ul class="nav flex-column">
+            <li>
+                <a href="home.php" class="nav-link">
+                    <i class="bi bi-house"></i>
+                    <span class="link-text">Home</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="customer.php" class="nav-link">
+                    <i class="bi bi-people"></i>
+                    <span class="link-text">Customers</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="product.php" class="nav-link">
+                    <i class="bi bi-box"></i>
+                    <span class="link-text">Products</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="order.php" class="nav-link">
+                    <i class="bi bi-cart"></i>
+                    <span class="link-text">Orders</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="offer.php" class="nav-link">
+                    <i class="bi bi-tag"></i>
+                    <span class="link-text">Offers</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="payment.php" class="nav-link">
+                    <i class="bi bi-credit-card"></i>
+                    <span class="link-text">Payments</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="notification.php" class="nav-link">
+                    <i class="bi bi-bell"></i>
+                    <span class="link-text">Notifications</span>
+                </a>
+            </li>
+
+
+            <li class="mt-4">
+                <a href="login.php" class="nav-link text-danger">
+                    <i class="bi bi-box-arrow-left"></i>
+                    <span class="link-text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+
+    <nav class="navbar sticky-top px-3 py-2 shadow-sm" id="navbar">
+        <div class="container-fluid">
+
+            <!-- sidebar button and search button -->
+            <div class="d-flex align-items-center gap-2">
+
+                <!-- sidebar button -->
+                <button class="btn btn-light border" id="toggle-btn">
+                    <i class="bi bi-list"></i>
+                </button>
+
+                <input class="form-control d-none d-md-block" placeholder="Search..." style="max-width:250px;">
+            </div>
+
+
+            <div class="d-flex align-items-center gap-3">
+
+                <!-- dark button -->
+                <button class="btn btn-light border" onclick="toggleDark()">
+                    <i class="bi bi-moon-stars"></i>
+                </button>
+
+                <!-- profile bitton -->
+                <div class="dropdown">
+
+                    <button class="btn p-0 border-0 bg-transparent dropdown-toggle d-flex align-items-center"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+
+                        <img src="image/sandiyo.jpg" width="40" height="40" class="rounded-circle border" alt="Profile">
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow">
+
+                        <li class="px-3 py-2">
+                            <strong>Chirag Ahir</strong><br>
+                            <small class="text-muted">admin@gmail.com</small>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" href="profile.php">
+                                <i class="bi bi-person me-2"></i>
+                                My Profile
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item" href="settings.php">
+                                <i class="bi bi-gear me-2"></i>
+                                Settings
+                            </a>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item text-danger" href="logout.php">
+                                <i class="bi bi-box-arrow-right me-2"></i>
+                                Logout
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+
+
+            </div>
+
+        </div>
+    </nav>
+
+
+    <div class="content">
+        <style>
+.offer-card {
+    border: none;
+    border-radius: 15px;
+    background: linear-gradient(45deg, #f8f9fa, #ffffff);
+}
+
+.promo-code {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    color: #0d6efd;
+    background: #e7f1ff;
+    padding: 4px 8px;
+    border-radius: 5px;
+    border: 1px dashed #0d6efd;
+}
+
+.countdown-timer {
+    font-size: 0.9rem;
+    color: #dc3545;
+    font-weight: 600;
+}
+
+/* validation */
+label.error {
+    font-size: 13px;
+    margin-top: 5px;
+    color: #dc3545;
+}
+</style>
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3 class="fw-bold">Promotions & Offers</h3>
+            <p class="text-muted">Manage seasonal discounts, coupon codes, and festival banners.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- LEFT FORM -->
+        <div class="col-lg-4">
+            <div class="card offer-card shadow-sm p-3">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">
+                        <i class="bi bi-megaphone me-2"></i>Create New Offer
+                    </h5>
+
+                    <form id="offerForm">
+
+                        <div class="mb-3">
+                            <label class="form-label">Offer Title</label>
+                            <input type="text" id="offTitle" name="offTitle" class="form-control"
+                                placeholder="e.g. Diwali Dhamaka">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Coupon Code</label>
+                            <input type="text" id="offCode" name="offCode" class="form-control" placeholder="SAVE50">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label">Discount (%)</label>
+                                <input type="number" id="offPercent" name="offPercent" class="form-control"
+                                    placeholder="50">
+                            </div>
+
+                            <div class="col-6 mb-3">
+                                <label class="form-label">Min. Purchase</label>
+                                <input type="number" id="offMin" name="offMin" class="form-control" placeholder="₹999">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Expiry Date</label>
+                            <input type="date" id="offExpiry" name="offExpiry" class="form-control">
+                        </div>
+
+                        <button type="button" class="btn btn-primary w-100 py-2 fw-bold" onclick="addOffer()">
+                            Launch Promotion
+                        </button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT TABLE -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-4">Active Promotions</h5>
+
+                    <div class="table-responsive">
+                        <table class="table align-middle" id="offerTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Offer Details</th>
+                                    <th>Code</th>
+                                    <th>Discount</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold">Welcome Bonus</div>
+                                        <small class="text-muted">Expires: 31-Dec-2026</small>
+                                    </td>
+                                    <td><span class="promo-code">HELLO20</span></td>
+                                    <td><span class="text-success fw-bold">20% OFF</span></td>
+                                    <td><span class="badge bg-success-subtle text-success">Active</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-danger"
+                                            onclick="this.closest('tr').remove()">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ================= VALIDATION ================= -->
+
+<script>
+/* custom rule: future date */
+$.validator.addMethod("futureDate", function(value) {
+    if (!value) return false;
+    return new Date(value) > new Date();
+}, "Expiry must be a future date");
+
+/* custom rule: coupon code */
+$.validator.addMethod("couponFormat", function(value) {
+    return /^[A-Z0-9]{6,10}$/.test(value);
+}, "Use 6–10 uppercase letters/numbers only");
+
+
+$(document).ready(function() {
+
+    $("#offerForm").validate({
+
+        rules: {
+            offTitle: {
+                required: true,
+                minlength: 3
+            },
+
+            offCode: {
+                required: true,
+                couponFormat: true
+            },
+
+            offPercent: {
+                required: true,
+                number: true,
+                min: 1,
+                max: 100
+            },
+
+            offMin: {
+                number: true,
+                min: 0
+            },
+
+            offExpiry: {
+                required: true,
+                futureDate: true
+            }
+        },
+
+        messages: {
+            offTitle: {
+                required: "Enter offer title",
+                minlength: "Minimum 3 characters"
+            },
+            offCode: {
+                required: "Enter coupon code"
+            },
+            offPercent: {
+                required: "Enter discount %",
+                min: "Minimum 1%",
+                max: "Maximum 100%"
+            },
+            offExpiry: {
+                required: "Select expiry date"
+            }
+        },
+
+        errorClass: "is-invalid",
+        validClass: "is-valid",
+
+        errorPlacement: function(error, element) {
+            error.addClass("invalid-feedback");
+            element.closest(".mb-3").append(error);
+        }
+    });
+
+});
+</script>
+
+<!-- ================= ADD OFFER ================= -->
+
+<script>
+function addOffer() {
+
+    if (!$("#offerForm").valid()) return;
+
+    const title = $('#offTitle').val();
+    const code = $('#offCode').val().toUpperCase();
+    const percent = $('#offPercent').val();
+    const expiry = $('#offExpiry').val();
+
+    const row = `
+        <tr>
+            <td>
+                <div class="fw-bold">${title}</div>
+                <small class="text-muted">Expires: ${expiry}</small>
+            </td>
+            <td><span class="promo-code">${code}</span></td>
+            <td><span class="text-success fw-bold">${percent}% OFF</span></td>
+            <td><span class="badge bg-success-subtle text-success">Active</span></td>
+            <td>
+                <button class="btn btn-sm btn-outline-danger"
+                        onclick="this.closest('tr').remove()">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `;
+
+    $("#offerTable tbody").prepend(row);
+
+    $("#offerForm")[0].reset();
+    $(".form-control").removeClass("is-valid");
+
+    alert("Promotion launched successfully!");
+}
+</script>
+
+<script>
+const sidebar = document.getElementById('sidebar');
+const navbar = document.getElementById('navbar');
+const content = document.querySelector('.content');
+const toggleBtn = document.getElementById('toggle-btn');
+const darkBtnIcon = document.querySelector('[onclick="toggleDark()"] i');
+
+/* ================= RESTORE THEME ================= */
+
+(function() {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+        document.body.classList.add("dark-mode");
+        if (darkBtnIcon) darkBtnIcon.className = "bi bi-sun";
+    }
+})();
+
+/* ================= MENU TOGGLE ================= */
+
+if (toggleBtn && sidebar) {
+    toggleBtn.addEventListener('click', () => {
+
+        // mobile
+        if (window.innerWidth < 992) {
+            sidebar.classList.toggle('mobile-show');
+            return;
+        }
+
+        // desktop
+        sidebar.classList.toggle('collapsed');
+        navbar && navbar.classList.toggle('collapsed-margin');
+        content && content.classList.toggle('collapsed-margin');
+    });
+}
+
+/* ================= AUTO CLOSE MOBILE SIDEBAR ================= */
+
+document.querySelectorAll('.sidebar .nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth < 992 && sidebar) {
+            sidebar.classList.remove('mobile-show');
+        }
+    });
+});
+
+/* ================= DARK MODE TOGGLE ================= */
+
+function toggleDark() {
+    document.body.classList.toggle('dark-mode');
+
+    if (document.body.classList.contains('dark-mode')) {
+        localStorage.setItem("theme", "dark");
+        if (darkBtnIcon) darkBtnIcon.className = "bi bi-sun";
+    } else {
+        localStorage.setItem("theme", "light");
+        if (darkBtnIcon) darkBtnIcon.className = "bi bi-moon-stars";
+    }
+}
+
+/* ================= WINDOW RESIZE FIX ================= */
+
+window.addEventListener('resize', () => {
+    if (window.innerWidth >= 992 && sidebar) {
+        sidebar.classList.remove('mobile-show');
+    }
+});
+</script>
+
+</div>
+</body>
+
+</html>
