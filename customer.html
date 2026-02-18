@@ -1,952 +1,288 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="js.js"></script>
-    <script src="jsv.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
-    <style>
-    /* ================= ROOT ================= */
-
-    :root {
-        --sidebar-width: 170px;
-        --sidebar-collapsed-width: 75px;
-        --layout-gap: 16px;
-        --transition: .3s ease;
-    }
-
-    /* ================= BASE ================= */
-
-    body {
-        background: #f8f9fa;
-        color: #212529;
-        transition: var(--transition);
-        overflow-x: hidden;
-    }
-
-    /* ================= SIDEBAR ================= */
-
-    .sidebar {
-        width: var(--sidebar-width);
-        height: 100vh;
-        position: fixed;
-        top: 0;
-        left: 0;
-        background: #ffffff;
-        border-right: 1px solid #dee2e6;
-        padding: 20px 12px;
-        transition: var(--transition);
-        z-index: 1000;
-    }
-
-    .sidebar.collapsed {
-        width: var(--sidebar-collapsed-width);
-    }
-
-    .sidebar.collapsed .link-text,
-    .sidebar.collapsed h4 {
-        display: none;
-    }
-
-    .sidebar.collapsed .nav-link {
-        justify-content: center;
-        padding: 12px 0;
-    }
-
-    .sidebar .nav-link {
-        color: #495057;
-        padding: 12px 15px;
-        border-radius: 8px;
-        margin-bottom: 6px;
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-        white-space: nowrap;
-        transition: var(--transition);
-    }
-
-    .sidebar .nav-link i {
-        font-size: 1.25rem;
-        min-width: 35px;
-    }
-
-    .sidebar .nav-link:hover {
-        background: #f1f3f5;
-        color: #000;
-    }
-
-    .sidebar .nav-link.active {
-        background: #0d6efd;
-        color: #fff;
-    }
-
-    /* ================= NAVBAR ================= */
-
-    .navbar {
-        background: #ffffff;
-        border-bottom: 1px solid #dee2e6;
-        z-index: 999;
-        transition: var(--transition);
-        margin-left: calc(var(--sidebar-width) + var(--layout-gap));
-        padding: 10px 14px;
-    }
-
-    /* ================= CONTENT ================= */
-
-    .content {
-        margin-left: calc(var(--sidebar-width) + var(--layout-gap));
-        padding: 20px;
-        margin-top: var(--layout-gap);
-        transition: var(--transition);
-    }
-
-    /* collapsed spacing */
-
-    .collapsed-margin {
-        margin-left: calc(var(--sidebar-collapsed-width) + var(--layout-gap)) !important;
-    }
-
-    /* ================= CARDS ================= */
-
-    .card {
-        border-radius: 12px;
-        border: none;
-        transition: var(--transition);
-    }
-
-    /* ================= TABLE ================= */
-
-    .table {
-        background: #ffffff;
-        border-radius: 8px;
-        transition: var(--transition);
-    }
-
-    .table thead {
-        background: #f1f3f5;
-    }
-
-    .table-hover tbody tr:hover {
-        background: #f8f9fa;
-    }
-
-    /* ================= FORMS ================= */
-
-    .form-control {
-        border-radius: 8px;
-        transition: var(--transition);
-    }
-
-    .form-control:focus {
-        box-shadow: none;
-        border-color: #0d6efd;
-    }
-
-    /* ================= MOBILE ================= */
-
-    @media (max-width: 991px) {
-
-        .navbar,
-        .content {
-            margin-left: 0 !important;
-        }
-
-        .content {
-            padding: 15px;
-        }
-
-        .sidebar {
-            left: -100%;
-        }
-
-        .sidebar.mobile-show {
-            left: 0;
-        }
-    }
-
-    /* ================= DARK MODE ================= */
-
-    body.dark-mode {
-        background: #121212;
-        color: #e0e0e0;
-    }
-
-    .dark-mode strong,
-    .dark-mode small,
-    .dark-mode .text-muted {
-        color: #e0e0e0 !important;
-    }
-
-    /* Sidebar */
-
-    .dark-mode .sidebar {
-        background: #1a1a1a;
-        border-color: #2c2c2c;
-    }
-
-    .dark-mode .sidebar .nav-link {
-        color: #cfcfcf;
-    }
-
-    .dark-mode .sidebar .nav-link:hover {
-        background: #2a2a2a;
-        color: #ffffff;
-    }
-
-    .dark-mode .sidebar .nav-link.active {
-        background: #0d6efd;
-        color: #fff;
-    }
-
-    /* Navbar */
-
-    .dark-mode .navbar {
-        background: #1a1a1a;
-        border-color: #2c2c2c;
-    }
-
-    /* Cards */
-
-    .dark-mode .card {
-        background: #1e1e1e;
-        color: #e6e6e6;
-    }
-
-    /* Tables */
-
-    .dark-mode .table {
-        background: #1a1a1a;
-        color: #e6e6e6;
-    }
-
-    .dark-mode .table thead {
-        background: #262626;
-        color: #e6e6e6;
-    }
-
-    .dark-mode .table td,
-    .dark-mode .table th {
-        border-color: #333;
-        background: #1a1a1a;
-        color: #e6e6e6;
-    }
-
-    .dark-mode .table-hover tbody tr:hover {
-        background: #2a2a2a;
-    }
-
-    /* Forms */
-
-    .dark-mode .form-control {
-        background: #2b2b2b;
-        border-color: #444;
-        color: #ffffff;
-    }
-
-    .dark-mode .form-control:focus {
-        background: #2b2b2b;
-        border-color: #0d6efd;
-        color: #ffffff;
-    }
-
-    /* Modal */
-
-    .dark-mode .modal-content {
-        background: #1e1e1e;
-        color: #e6e6e6;
-    }
-
-    .dark-mode .modal-header,
-    .dark-mode .modal-footer {
-        border-color: #333;
-    }
-
-    /* Dropdown */
-
-    .dark-mode .dropdown-menu {
-        background: #1f1f1f;
-        border-color: #333;
-    }
-
-    .dark-mode .dropdown-item {
-        color: #ddd;
-    }
-
-    .dark-mode .dropdown-item:hover {
-        background: #2a2a2a;
-        color: #fff;
-    }
-
-    /* Buttons */
-
-    .dark-mode .btn-outline-secondary {
-        color: #bbb;
-        border-color: #555;
-    }
-
-    /* Inputs inside dark container */
-
-    .dark-mode #dark input,
-    .dark-mode #dark select,
-    .dark-mode #dark textarea {
-        background-color: #2d2d2d;
-        border: 1px solid #444;
-        color: #ffffff;
-    }
-
-    .dark-mode #dark input:focus {
-        background-color: #333;
-        border-color: #4e73df;
-        outline: none;
-        box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
-    }
-
-    /* Placeholder */
-
-    .dark-mode input::placeholder,
-    .dark-mode textarea::placeholder {
-        color: #bbbbbb !important;
-        opacity: 1;
-    }
-
-    /* Scrollbar */
-
-    .dark-mode ::-webkit-scrollbar {
-        width: 8px;
-    }
-
-    .dark-mode ::-webkit-scrollbar-thumb {
-        background: #333;
-        border-radius: 10px;
-    }
-    </style>
-
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Admin</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+<!-- REQUIRED FOR YOUR VALIDATION -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.19.5/jquery.validate.min.js"></script>
+
+<style>
+:root {
+--sidebar-width:170px;
+--sidebar-collapsed-width:75px;
+--layout-gap:16px;
+}
+
+body { background:#f8f9fa; overflow-x:hidden; }
+
+.sidebar{
+width:var(--sidebar-width);
+height:100vh;
+position:fixed;
+left:0;
+top:0;
+background:#fff;
+border-right:1px solid #dee2e6;
+padding:20px 12px;
+transition:.25s;
+z-index:1000;
+}
+
+.sidebar.collapsed{ width:var(--sidebar-collapsed-width); }
+.sidebar.collapsed .link-text,
+.sidebar.collapsed h4{ display:none; }
+
+.sidebar .nav-link{
+padding:12px 15px;
+border-radius:8px;
+display:flex;
+gap:10px;
+color:#495057;
+text-decoration:none;
+}
+
+.sidebar .nav-link.active{
+background:#0d6efd;
+color:#fff;
+}
+
+.navbar{
+margin-left:calc(var(--sidebar-width) + var(--layout-gap));
+background:#fff;
+border-bottom:1px solid #dee2e6;
+}
+
+.content{
+margin-left:calc(var(--sidebar-width) + var(--layout-gap));
+padding:20px;
+}
+
+.collapsed-margin{
+margin-left:calc(var(--sidebar-collapsed-width) + var(--layout-gap))!important;
+}
+
+@media(max-width:991px){
+.navbar,.content{ margin-left:0!important; }
+.sidebar{ left:-100%; }
+.sidebar.mobile-show{ left:0; }
+}
+
+/* DARK */
+
+body.dark-mode{ background:#121212; color:#e0e0e0; }
+.dark-mode .sidebar,
+.dark-mode .navbar,
+.dark-mode .card{ background:#1a1a1a; color:#eee; }
+
+label.error{
+color:#dc3545;
+font-size:.9rem;
+margin-top:4px;
+}
+</style>
 </head>
 
 <body>
-    <div class="sidebar" id="sidebar">
-        <h4 class="px-3 mb-4 text-primary fw-bold text-uppercase">Admin</h4>
 
-        <ul class="nav flex-column">
-            <li>
-                <a href="home.html" class="nav-link">
-                    <i class="bi bi-house"></i>
-                    <span class="link-text">Home</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="customer.html" class="nav-link">
-                    <i class="bi bi-people"></i>
-                    <span class="link-text">Customers</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="product.html" class="nav-link">
-                    <i class="bi bi-box"></i>
-                    <span class="link-text">Products</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="order.html" class="nav-link">
-                    <i class="bi bi-cart"></i>
-                    <span class="link-text">Orders</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="offer.html" class="nav-link">
-                    <i class="bi bi-tag"></i>
-                    <span class="link-text">Offers</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="payment.html" class="nav-link">
-                    <i class="bi bi-credit-card"></i>
-                    <span class="link-text">Payments</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="notification.html" class="nav-link">
-                    <i class="bi bi-bell"></i>
-                    <span class="link-text">Notifications</span>
-                </a>
-            </li>
-
-
-            <li class="mt-4">
-                <a href="login.html" class="nav-link text-danger">
-                    <i class="bi bi-box-arrow-left"></i>
-                    <span class="link-text">Logout</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-
-
-    <nav class="navbar sticky-top px-3 py-2 shadow-sm" id="navbar">
-        <div class="container-fluid">
-
-            <!-- sidebar button and search button -->
-            <div class="d-flex align-items-center gap-2">
-
-                <!-- sidebar button -->
-                <button class="btn btn-light border" id="toggle-btn">
-                    <i class="bi bi-list"></i>
-                </button>
-
-                <input class="form-control d-none d-md-block" placeholder="Search..." style="max-width:250px;">
-            </div>
-
-
-            <div class="d-flex align-items-center gap-3">
-
-                <!-- dark button -->
-                <button class="btn btn-light border" onclick="toggleDark()">
-                    <i class="bi bi-moon-stars"></i>
-                </button>
-
-                <!-- profile bitton -->
-                <div class="dropdown">
-
-                    <button class="btn p-0 border-0 bg-transparent dropdown-toggle d-flex align-items-center"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-
-                        <img src="sandiyo.jpg" width="40" height="40" class="rounded-circle border" alt="Profile">
-                    </button>
-
-                    <ul class="dropdown-menu dropdown-menu-end shadow">
-
-                        <li class="px-3 py-2">
-                            <strong>Chirag Ahir</strong><br>
-                            <small class="text-muted">admin@gmail.com</small>
-                        </li>
-
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item" href="profile.php">
-                                <i class="bi bi-person me-2"></i>
-                                My Profile
-                            </a>
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item" href="settings.php">
-                                <i class="bi bi-gear me-2"></i>
-                                Settings
-                            </a>
-                        </li>
-
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item text-danger" href="logout.php">
-                                <i class="bi bi-box-arrow-right me-2"></i>
-                                Logout
-                            </a>
-                        </li>
-
-                    </ul>
-                </div>
-
-
-            </div>
-
-        </div>
-    </nav>
-
-
-    <div class="content"><div class="container-fluid">
-    <div class="card shadow-sm border-0 p-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="fw-bold">Customer list</h3>
-            <button class="btn btn-primary px-4" data-bs-toggle="modal" data-bs-target="#customerModal"
-                onclick="resetForm()">
-                <i class="bi bi-plus-lg"></i> Add
-            </button>
-        </div>
-
-        <div class="table-responsive">
-            <table id="customerTable" class="table table-hover align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Role</th>
-                        <th>Email</th>
-                        <th>City</th>
-                        <th>Phone</th>
-                        <th class="text-center">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Chirag Ahir</td>
-                        <td><span class="badge bg-primary">Admin</span></td>
-                        <td>chirag@gmail.com</td>
-                        <td>Rajkot</td>
-                        <td>1234567890</td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-info me-2" onclick="editRow(this)"><i
-                                    class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteRow(this)"><i
-                                    class="bi bi-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>John Doe</td>
-                        <td><span class="badge bg-secondary">User</span></td>
-                        <td>john@gmail.com</td>
-                        <td>Surat</td>
-                        <td>0987654321</td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-info me-2" onclick="editRow(this)"><i
-                                    class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteRow(this)"><i
-                                    class="bi bi-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Jane Smith</td>
-                        <td><span class="badge bg-secondary">User</span></td>
-                        <td>jane@gmail.com</td>
-                        <td>Vadodara</td>
-                        <td>1234567890</td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-info me-2" onclick="editRow(this)"><i
-                                    class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteRow(this)"><i
-                                    class="bi bi-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>Michael Brown</td>
-                        <td><span class="badge bg-primary">Admin</span></td>
-                        <td>michael@gmail.com</td>
-                        <td>Baroda</td>
-                        <td>9876543210</td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-info me-2" onclick="editRow(this)"><i
-                                    class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteRow(this)"><i
-                                    class="bi bi-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>Emily Davis</td>
-                        <td><span class="badge bg-secondary">User</span></td>
-                        <td>emily@gmail.com</td>
-                        <td>Vadodara</td>
-                        <td>1234567890</td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-info me-2" onclick="editRow(this)"><i
-                                    class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteRow(this)"><i
-                                    class="bi bi-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>David Wilson</td>
-                        <td><span class="badge bg-secondary">User</span></td>
-                        <td>david@gmail.com</td>
-                        <td>Surat</td>
-                        <td>9876543210</td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-info me-2" onclick="editRow(this)"><i
-                                    class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteRow(this)"><i
-                                    class="bi bi-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td>Sarah Johnson</td>
-                        <td><span class="badge bg-primary">Admin</span></td>
-                        <td>sarah@gmail.com</td>
-                        <td>Vadodara</td>
-                        <td>1234567890</td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-info me-2" onclick="editRow(this)"><i
-                                    class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteRow(this)"><i
-                                    class="bi bi-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td>Chris Lee</td>
-                        <td><span class="badge bg-secondary">User</span></td>
-                        <td>chris@gmail.com</td>
-                        <td>Surat</td>
-                        <td>9876543210</td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-info me-2" onclick="editRow(this)"><i
-                                    class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteRow(this)"><i
-                                    class="bi bi-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>9</td>
-                        <td>Amy Martinez</td>
-                        <td><span class="badge bg-secondary">User</span></td>
-                        <td>amy@gmail.com</td>
-                        <td>Vadodara</td>
-                        <td>1234567890</td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-info me-2" onclick="editRow(this)"><i
-                                    class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteRow(this)"><i
-                                    class="bi bi-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>10</td>
-                        <td>Brian Taylor</td>
-                        <td><span class="badge bg-primary">Admin</span></td>
-                        <td>brian@gmail.com</td>
-                        <td>Surat</td>
-                        <td>9876543210</td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-info me-2" onclick="editRow(this)"><i
-                                    class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteRow(this)"><i
-                                    class="bi bi-trash"></i></button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+<h4 class="px-3 mb-4 text-primary">Admin</h4>
+<a href="home.html" class="nav-link"><i class="bi bi-house"></i><span class="link-text">Home</span></a>
+<a href="customer.html" class="nav-link active"><i class="bi bi-people"></i><span class="link-text">Customers</span></a>
 </div>
 
-<div class="modal fade" id="customerModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content border-0 shadow">
+<!-- NAVBAR -->
+<nav class="navbar sticky-top px-3 py-2 shadow-sm" id="navbar">
+<div class="container-fluid">
 
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="modalTitle">Add New Customer</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
+<button class="btn btn-light border" id="toggle-btn">
+<i class="bi bi-list"></i>
+</button>
 
-            <div class="modal-body">
+<button class="btn btn-light border ms-auto" id="darkBtn">
+<i class="bi bi-moon-stars"></i>
+</button>
 
-                <!-- UPDATED FORM -->
-                <form id="custForm">
+</div>
+</nav>
 
-                    <input type="hidden" id="editRowIndex">
+<!-- CONTENT -->
+<div class="content">
+<div class="container-fluid">
 
-                    <div class="mb-3">
-                        <label class="form-label">Full Name</label>
-                        <input type="text" id="customerName" name="customerName" class="form-control">
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label d-block">System Role</label>
-
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="customerRole" id="roleAdmin"
-                                value="Admin">
-                            <label class="form-check-label">Admin</label>
-                        </div>
-
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="customerRole" id="roleUser" value="User"
-                                checked>
-                            <label class="form-check-label">User</label>
-                        </div>
-
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Email Address</label>
-                        <input type="email" id="customerEmail" name="customerEmail" class="form-control">
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">City</label>
-                            <input type="text" id="customerCity" name="customerCity" class="form-control">
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Phone Number</label>
-                            <input type="text" id="customerNumber" name="customerNumber" class="form-control">
-                        </div>
-                    </div>
-
-                </form>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light border" data-bs-dismiss="modal">
-                    Cancel
-                </button>
-
-                <!-- submit instead of onclick -->
-                <button type="submit" form="custForm" class="btn btn-primary px-4">
-                    Save Customer
-                </button>
-            </div>
-
-        </div>
-    </div>
+<div class="card shadow-sm p-4">
+<div class="d-flex justify-content-between mb-3">
+<h3>Customer List</h3>
+<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#customerModal" onclick="resetForm()">Add</button>
 </div>
 
+<table id="customerTable" class="table table-hover">
+<thead>
+<tr>
+<th>ID</th><th>Name</th><th>Role</th><th>Email</th><th>City</th><th>Phone</th><th>Action</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
+</div>
+</div>
+</div>
+
+<!-- MODAL -->
+<div class="modal fade" id="customerModal">
+<div class="modal-dialog">
+<div class="modal-content">
+
+<div class="modal-header bg-primary text-white">
+<h5 id="modalTitle">Add Customer</h5>
+<button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+
+<form id="custForm">
+<div class="modal-body">
+
+<input type="hidden" id="editRowIndex">
+
+<input class="form-control mb-3" id="customerName" name="customerName" placeholder="Name">
+
+<div class="mb-3">
+<label><input type="radio" name="customerRole" value="Admin"> Admin</label>
+<label class="ms-3"><input type="radio" name="customerRole" value="User" checked> User</label>
+</div>
+
+<input class="form-control mb-3" id="customerEmail" name="customerEmail" placeholder="Email">
+<input class="form-control mb-3" id="customerCity" name="customerCity" placeholder="City">
+<input class="form-control" id="customerNumber" name="customerNumber" placeholder="Phone">
+
+</div>
+
+<div class="modal-footer">
+<button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+<button class="btn btn-primary" type="submit">Save</button>
+</div>
+
+</form>
+
+</div>
+</div>
+</div>
+
+<!-- BOOTSTRAP JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-$(document).ready(function() {
+document.addEventListener("DOMContentLoaded", function(){
 
-    $("#custForm").validate({
+/* SIDEBAR */
+const sidebar=document.getElementById("sidebar");
+const navbar=document.getElementById("navbar");
+const content=document.querySelector(".content");
 
-        rules: {
-            customerName: {
-                required: true,
-                minlength: 3,
-                maxlength: 50
-            },
-            customerRole: {
-                required: true
-            },
-            customerEmail: {
-                required: true,
-                email: true
-            },
-            customerCity: {
-                required: true
-            },
-            customerNumber: {
-                required: true,
-                digits: true,
-                minlength: 10,
-                maxlength: 10
-            }
-        },
+toggleBtn.onclick=()=>{
+if(window.innerWidth<992){ sidebar.classList.toggle("mobile-show"); return; }
+sidebar.classList.toggle("collapsed");
+navbar.classList.toggle("collapsed-margin");
+content.classList.toggle("collapsed-margin");
+};
 
-        messages: {
-            customerName: {
-                required: "Name is required",
-                minlength: "Minimum 3 characters",
-                maxlength: "Maximum 50 characters"
-            },
-            customerRole: {
-                required: "Please select role"
-            },
-            customerEmail: {
-                required: "Email is required",
-                email: "Enter valid email"
-            },
-            customerCity: {
-                required: "City is required"
-            },
-            customerNumber: {
-                required: "Phone is required",
-                digits: "Numbers only",
-                minlength: "Must be 10 digits",
-                maxlength: "Must be 10 digits"
-            }
-        },
+/* DARK */
+darkBtn.onclick=()=>{
+document.body.classList.toggle("dark-mode");
+localStorage.setItem("theme",document.body.classList.contains("dark-mode")?"dark":"light");
+};
 
-        errorElement: "small",
-        errorClass: "text-danger",
+if(localStorage.getItem("theme")==="dark"){
+document.body.classList.add("dark-mode");
+}
 
-
-        errorPlacement: function(error, element) {
-            if (element.attr("type") === "radio") {
-                error.insertAfter(element.closest(".mb-3"));
-            } else {
-                error.insertAfter(element);
-            }
-        },
-
-        // bhool thay tyare
-        highlight: function(element) {
-            $(element)
-                .addClass("is-invalid")
-                .removeClass("is-valid");
-        },
-
-        // sacho hoye tyare
-        unhighlight: function(element) {
-            $(element)
-                .removeClass("is-invalid")
-                .addClass("is-valid");
-        },
-
-        submitHandler: function() {
-            handleSave();
-        }
-
-    });
+/* VALIDATION */
+$("#custForm").validate({
+rules:{
+customerName:{required:true,minlength:3},
+customerEmail:{required:true,email:true},
+customerCity:{required:true},
+customerNumber:{required:true,digits:true,minlength:10,maxlength:10}
+},
+submitHandler:function(){
+saveRow();
+}
+});
 
 });
 
+/* CRUD */
 
+function saveRow(){
+const name=customerName.value;
+const role=$('input[name="customerRole"]:checked').val();
+const email=customerEmail.value;
+const city=customerCity.value;
+const phone=customerNumber.value;
+const idx=editRowIndex.value;
+const tbody=document.querySelector("#customerTable tbody");
 
+if(idx===""){
+const row=tbody.insertRow();
+row.innerHTML=buildRow(tbody.rows.length+1,name,role,email,city,phone);
+}else{
+const row=tbody.rows[idx];
+row.innerHTML=buildRow(idx+1,name,role,email,city,phone);
+}
 
-function handleSave() {
-    const form = document.getElementById("custForm");
-    if (!form.checkValidity()) {
-        form.classList.add('was-validated');
-        return;
-    }
+bootstrap.Modal.getInstance(customerModal).hide();
+resetForm();
+}
 
-    const name = document.getElementById("customerName").value;
-    const role = document.querySelector('input[name="customerRole"]:checked').value;
-    const email = document.getElementById("customerEmail").value;
-    const city = document.getElementById("customerCity").value;
-    const number = document.getElementById("customerNumber").value;
-    const index = document.getElementById("editRowIndex").value;
-
-    const table = document.querySelector("#customerTable tbody");
-
-    if (index === "") {
-        // Add Mode
-        const row = table.insertRow();
-        row.innerHTML = `
-<td>${table.rows.length}</td>
-<td>${name}</td>
-<td><span class="badge ${role === 'Admin' ? 'bg-primary' : 'bg-secondary'}">${role}</span></td>
-<td>${email}</td>
-<td>${city}</td>
-<td>${number}</td>
-<td class="text-center">
-    <button class="btn btn-sm btn-outline-info me-2" onclick="editRow(this)"><i class="bi bi-pencil"></i></button>
-    <button class="btn btn-sm btn-outline-danger" onclick="deleteRow(this)"><i class="bi bi-trash"></i></button>
+function buildRow(id,n,r,e,c,p){
+return `<td>${id}</td>
+<td>${n}</td>
+<td><span class="badge ${r==="Admin"?"bg-primary":"bg-secondary"}">${r}</span></td>
+<td>${e}</td>
+<td>${c}</td>
+<td>${p}</td>
+<td>
+<button class="btn btn-sm btn-info" onclick="editRow(this)">✏</button>
+<button class="btn btn-sm btn-danger" onclick="deleteRow(this)">🗑</button>
 </td>`;
-    } else {
-        // Edit Mode
-        const row = table.rows[index];
-        row.cells[1].innerText = name;
-        row.cells[2].innerHTML =
-            `<span class="badge ${role === 'Admin' ? 'bg-primary' : 'bg-secondary'}">${role}</span>`;
-        row.cells[3].innerText = email;
-        row.cells[4].innerText = city;
-        row.cells[5].innerText = number;
-    }
-
-    bootstrap.Modal.getInstance(document.getElementById('customerModal')).hide();
-    resetForm();
 }
 
-function editRow(btn) {
-    const row = btn.closest("tr");
-    document.getElementById("editRowIndex").value = row.sectionRowIndex;
-    document.getElementById("modalTitle").innerText = "Edit Customer";
-
-    document.getElementById("customerName").value = row.cells[1].innerText;
-    const role = row.cells[2].innerText.trim();
-    document.querySelector(`input[name="customerRole"][value="${role}"]`).checked = true;
-    document.getElementById("customerEmail").value = row.cells[3].innerText;
-    document.getElementById("customerCity").value = row.cells[4].innerText;
-    document.getElementById("customerNumber").value = row.cells[5].innerText;
-
-    new bootstrap.Modal(document.getElementById('customerModal')).show();
+function editRow(btn){
+const row=btn.closest("tr");
+editRowIndex.value=row.rowIndex-1;
+modalTitle.innerText="Edit Customer";
+customerName.value=row.cells[1].innerText;
+$('input[name="customerRole"][value="'+row.cells[2].innerText+'"]').prop("checked",true);
+customerEmail.value=row.cells[3].innerText;
+customerCity.value=row.cells[4].innerText;
+customerNumber.value=row.cells[5].innerText;
+new bootstrap.Modal(customerModal).show();
 }
 
-function resetForm() {
-    document.getElementById("custForm").reset();
-    document.getElementById("custForm").classList.remove('was-validated');
-    document.getElementById("editRowIndex").value = "";
-    document.getElementById("modalTitle").innerText = "Add New Customer";
+function deleteRow(btn){
+btn.closest("tr").remove();
+renumber();
 }
 
-function deleteRow(btn) {
-    if (confirm("Are you sure you want to delete this customer?")) {
-        btn.closest("tr").remove();
-    }
+function renumber(){
+$("#customerTable tbody tr").each(function(i){
+this.cells[0].innerText=i+1;
+});
+}
+
+function resetForm(){
+custForm.reset();
+editRowIndex.value="";
+modalTitle.innerText="Add Customer";
+$(".is-valid,.is-invalid").removeClass("is-valid is-invalid");
 }
 </script>
-<script>
-const sidebar = document.getElementById('sidebar');
-const navbar = document.getElementById('navbar');
-const content = document.querySelector('.content');
-const toggleBtn = document.getElementById('toggle-btn');
-const darkBtnIcon = document.querySelector('[onclick="toggleDark()"] i');
 
-/* ================= RESTORE THEME ================= */
-
-(function() {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-        document.body.classList.add("dark-mode");
-        if (darkBtnIcon) darkBtnIcon.className = "bi bi-sun";
-    }
-})();
-
-/* ================= MENU TOGGLE ================= */
-
-if (toggleBtn && sidebar) {
-    toggleBtn.addEventListener('click', () => {
-
-        // mobile
-        if (window.innerWidth < 992) {
-            sidebar.classList.toggle('mobile-show');
-            return;
-        }
-
-        // desktop
-        sidebar.classList.toggle('collapsed');
-        navbar && navbar.classList.toggle('collapsed-margin');
-        content && content.classList.toggle('collapsed-margin');
-    });
-}
-
-/* ================= AUTO CLOSE MOBILE SIDEBAR ================= */
-
-document.querySelectorAll('.sidebar .nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-        if (window.innerWidth < 992 && sidebar) {
-            sidebar.classList.remove('mobile-show');
-        }
-    });
-});
-
-/* ================= DARK MODE TOGGLE ================= */
-
-function toggleDark() {
-    document.body.classList.toggle('dark-mode');
-
-    if (document.body.classList.contains('dark-mode')) {
-        localStorage.setItem("theme", "dark");
-        if (darkBtnIcon) darkBtnIcon.className = "bi bi-sun";
-    } else {
-        localStorage.setItem("theme", "light");
-        if (darkBtnIcon) darkBtnIcon.className = "bi bi-moon-stars";
-    }
-}
-
-/* ================= WINDOW RESIZE FIX ================= */
-
-window.addEventListener('resize', () => {
-    if (window.innerWidth >= 992 && sidebar) {
-        sidebar.classList.remove('mobile-show');
-    }
-});
-</script>
-
-</div>
 </body>
-
 </html>
