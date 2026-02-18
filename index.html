@@ -1,595 +1,289 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="js.js"></script>
-    <script src="jsv.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel</title>
 
-    <style>
-    /* ================= ROOT ================= */
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-    :root {
-        --sidebar-width: 170px;
-        --sidebar-collapsed-width: 75px;
-        --layout-gap: 16px;
-        --transition: .3s ease;
+<style>
+:root {
+    --sidebar-width: 170px;
+    --sidebar-collapsed-width: 75px;
+    --layout-gap: 16px;
+    --transition: .3s ease;
+}
+
+body {
+    background: #f8f9fa;
+    color: #212529;
+    transition: var(--transition);
+    overflow-x: hidden;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #fff;
+    border-right: 1px solid #dee2e6;
+    padding: 20px 12px;
+    transition: width .25s ease, left .25s ease;
+    z-index: 1000;
+}
+
+.sidebar.collapsed {
+    width: var(--sidebar-collapsed-width);
+}
+
+.sidebar.collapsed .link-text,
+.sidebar.collapsed h4 {
+    display: none;
+}
+
+.sidebar.collapsed .nav-link {
+    justify-content: center;
+    padding: 12px 0;
+}
+
+.sidebar .nav-link {
+    color: #495057;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.sidebar .nav-link i {
+    font-size: 1.25rem;
+    min-width: 35px;
+}
+
+.sidebar .nav-link:hover {
+    background: #f1f3f5;
+}
+
+.sidebar .nav-link.active {
+    background: #0d6efd;
+    color: #fff;
+}
+
+/* NAVBAR + CONTENT */
+
+.navbar {
+    background: #fff;
+    border-bottom: 1px solid #dee2e6;
+    margin-left: calc(var(--sidebar-width) + var(--layout-gap));
+    padding: 10px 14px;
+}
+
+.content {
+    margin-left: calc(var(--sidebar-width) + var(--layout-gap));
+    padding: 20px;
+    margin-top: var(--layout-gap);
+}
+
+.collapsed-margin {
+    margin-left: calc(var(--sidebar-collapsed-width) + var(--layout-gap)) !important;
+}
+
+/* MOBILE */
+
+@media (max-width: 991px) {
+    .navbar, .content {
+        margin-left: 0 !important;
     }
-
-    /* ================= BASE ================= */
-
-    body {
-        background: #f8f9fa;
-        color: #212529;
-        transition: var(--transition);
-        overflow-x: hidden;
-    }
-
-    /* ================= SIDEBAR ================= */
 
     .sidebar {
-        width: var(--sidebar-width);
-        height: 100vh;
-        position: fixed;
-        top: 0;
+        left: -100%;
+    }
+
+    .sidebar.mobile-show {
         left: 0;
-        background: #ffffff;
-        border-right: 1px solid #dee2e6;
-        padding: 20px 12px;
-        transition: var(--transition);
-        z-index: 1000;
     }
-
-    .sidebar.collapsed {
-        width: var(--sidebar-collapsed-width);
-    }
-
-    .sidebar.collapsed .link-text,
-    .sidebar.collapsed h4 {
-        display: none;
-    }
-
-    .sidebar.collapsed .nav-link {
-        justify-content: center;
-        padding: 12px 0;
-    }
-
-    .sidebar .nav-link {
-        color: #495057;
-        padding: 12px 15px;
-        border-radius: 8px;
-        margin-bottom: 6px;
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-        white-space: nowrap;
-        transition: var(--transition);
-    }
-
-    .sidebar .nav-link i {
-        font-size: 1.25rem;
-        min-width: 35px;
-    }
-
-    .sidebar .nav-link:hover {
-        background: #f1f3f5;
-        color: #000;
-    }
-
-    .sidebar .nav-link.active {
-        background: #0d6efd;
-        color: #fff;
-    }
-
-    /* ================= NAVBAR ================= */
-
-    .navbar {
-        background: #ffffff;
-        border-bottom: 1px solid #dee2e6;
-        z-index: 999;
-        transition: var(--transition);
-        margin-left: calc(var(--sidebar-width) + var(--layout-gap));
-        padding: 10px 14px;
-    }
-
-    /* ================= CONTENT ================= */
-
-    .content {
-        margin-left: calc(var(--sidebar-width) + var(--layout-gap));
-        padding: 20px;
-        margin-top: var(--layout-gap);
-        transition: var(--transition);
-    }
-
-    /* collapsed spacing */
-
-    .collapsed-margin {
-        margin-left: calc(var(--sidebar-collapsed-width) + var(--layout-gap)) !important;
-    }
-
-    /* ================= CARDS ================= */
-
-    .card {
-        border-radius: 12px;
-        border: none;
-        transition: var(--transition);
-    }
-
-    /* ================= TABLE ================= */
-
-    .table {
-        background: #ffffff;
-        border-radius: 8px;
-        transition: var(--transition);
-    }
-
-    .table thead {
-        background: #f1f3f5;
-    }
-
-    .table-hover tbody tr:hover {
-        background: #f8f9fa;
-    }
-
-    /* ================= FORMS ================= */
-
-    .form-control {
-        border-radius: 8px;
-        transition: var(--transition);
-    }
-
-    .form-control:focus {
-        box-shadow: none;
-        border-color: #0d6efd;
-    }
-
-    /* ================= MOBILE ================= */
-
-    @media (max-width: 991px) {
-
-        .navbar,
-        .content {
-            margin-left: 0 !important;
-        }
-
-        .content {
-            padding: 15px;
-        }
-
-        .sidebar {
-            left: -100%;
-        }
-
-        .sidebar.mobile-show {
-            left: 0;
-        }
-    }
-
-    /* ================= DARK MODE ================= */
-
-    body.dark-mode {
-        background: #121212;
-        color: #e0e0e0;
-    }
-
-    .dark-mode strong,
-    .dark-mode small,
-    .dark-mode .text-muted {
-        color: #e0e0e0 !important;
-    }
-
-    /* Sidebar */
-
-    .dark-mode .sidebar {
-        background: #1a1a1a;
-        border-color: #2c2c2c;
-    }
-
-    .dark-mode .sidebar .nav-link {
-        color: #cfcfcf;
-    }
-
-    .dark-mode .sidebar .nav-link:hover {
-        background: #2a2a2a;
-        color: #ffffff;
-    }
-
-    .dark-mode .sidebar .nav-link.active {
-        background: #0d6efd;
-        color: #fff;
-    }
-
-    /* Navbar */
-
-    .dark-mode .navbar {
-        background: #1a1a1a;
-        border-color: #2c2c2c;
-    }
-
-    /* Cards */
-
-    .dark-mode .card {
-        background: #1e1e1e;
-        color: #e6e6e6;
-    }
-
-    /* Tables */
-
-    .dark-mode .table {
-        background: #1a1a1a;
-        color: #e6e6e6;
-    }
-
-    .dark-mode .table thead {
-        background: #262626;
-        color: #e6e6e6;
-    }
-
-    .dark-mode .table td,
-    .dark-mode .table th {
-        border-color: #333;
-        background: #1a1a1a;
-        color: #e6e6e6;
-    }
-
-    .dark-mode .table-hover tbody tr:hover {
-        background: #2a2a2a;
-    }
-
-    /* Forms */
-
-    .dark-mode .form-control {
-        background: #2b2b2b;
-        border-color: #444;
-        color: #ffffff;
-    }
-
-    .dark-mode .form-control:focus {
-        background: #2b2b2b;
-        border-color: #0d6efd;
-        color: #ffffff;
-    }
-
-    /* Modal */
-
-    .dark-mode .modal-content {
-        background: #1e1e1e;
-        color: #e6e6e6;
-    }
-
-    .dark-mode .modal-header,
-    .dark-mode .modal-footer {
-        border-color: #333;
-    }
-
-    /* Dropdown */
-
-    .dark-mode .dropdown-menu {
-        background: #1f1f1f;
-        border-color: #333;
-    }
-
-    .dark-mode .dropdown-item {
-        color: #ddd;
-    }
-
-    .dark-mode .dropdown-item:hover {
-        background: #2a2a2a;
-        color: #fff;
-    }
-
-    /* Buttons */
-
-    .dark-mode .btn-outline-secondary {
-        color: #bbb;
-        border-color: #555;
-    }
-
-    /* Inputs inside dark container */
-
-    .dark-mode #dark input,
-    .dark-mode #dark select,
-    .dark-mode #dark textarea {
-        background-color: #2d2d2d;
-        border: 1px solid #444;
-        color: #ffffff;
-    }
-
-    .dark-mode #dark input:focus {
-        background-color: #333;
-        border-color: #4e73df;
-        outline: none;
-        box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
-    }
-
-    /* Placeholder */
-
-    .dark-mode input::placeholder,
-    .dark-mode textarea::placeholder {
-        color: #bbbbbb !important;
-        opacity: 1;
-    }
-
-    /* Scrollbar */
-
-    .dark-mode ::-webkit-scrollbar {
-        width: 8px;
-    }
-
-    .dark-mode ::-webkit-scrollbar-thumb {
-        background: #333;
-        border-radius: 10px;
-    }
-    </style>
-
-
+}
+
+/* DARK MODE */
+
+body.dark-mode {
+    background: #121212;
+    color: #e0e0e0;
+}
+
+.dark-mode .sidebar,
+.dark-mode .navbar,
+.dark-mode .card,
+.dark-mode .table {
+    background: #1a1a1a;
+    color: #e6e6e6;
+}
+
+.dark-mode .form-control {
+    background: #2b2b2b;
+    border-color: #444;
+    color: #fff;
+}
+</style>
 </head>
 
 <body>
-    <div class="sidebar" id="sidebar">
-        <h4 class="px-3 mb-4 text-primary fw-bold text-uppercase">Admin</h4>
 
-        <ul class="nav flex-column">
-            <li>
-                <a href="home.html" class="nav-link">
-                    <i class="bi bi-house"></i>
-                    <span class="link-text">Home</span>
-                </a>
-            </li>
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+    <h4 class="px-3 mb-4 text-primary fw-bold text-uppercase">Admin</h4>
 
-            <li>
-                <a href="customer.html" class="nav-link">
-                    <i class="bi bi-people"></i>
-                    <span class="link-text">Customers</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="product.html" class="nav-link">
-                    <i class="bi bi-box"></i>
-                    <span class="link-text">Products</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="order.html" class="nav-link">
-                    <i class="bi bi-cart"></i>
-                    <span class="link-text">Orders</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="offer.html" class="nav-link">
-                    <i class="bi bi-tag"></i>
-                    <span class="link-text">Offers</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="payment.html" class="nav-link">
-                    <i class="bi bi-credit-card"></i>
-                    <span class="link-text">Payments</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="notification.html" class="nav-link">
-                    <i class="bi bi-bell"></i>
-                    <span class="link-text">Notifications</span>
-                </a>
-            </li>
-
-
-            <li class="mt-4">
-                <a href="login.html" class="nav-link text-danger">
-                    <i class="bi bi-box-arrow-left"></i>
-                    <span class="link-text">Logout</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-
-
-    <nav class="navbar sticky-top px-3 py-2 shadow-sm" id="navbar">
-        <div class="container-fluid">
-
-            <!-- sidebar button and search button -->
-            <div class="d-flex align-items-center gap-2">
-
-                <!-- sidebar button -->
-                <button class="btn btn-light border" id="toggle-btn">
-                    <i class="bi bi-list"></i>
-                </button>
-
-                <input class="form-control d-none d-md-block" placeholder="Search..." style="max-width:250px;">
-            </div>
-
-
-            <div class="d-flex align-items-center gap-3">
-
-                <!-- dark button -->
-                <button class="btn btn-light border" onclick="toggleDark()">
-                    <i class="bi bi-moon-stars"></i>
-                </button>
-
-                <!-- profile bitton -->
-                <div class="dropdown">
-
-                    <button class="btn p-0 border-0 bg-transparent dropdown-toggle d-flex align-items-center"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-
-                        <img src="sandiyo.jpg" width="40" height="40" class="rounded-circle border" alt="Profile">
-                    </button>
-
-                    <ul class="dropdown-menu dropdown-menu-end shadow">
-
-                        <li class="px-3 py-2">
-                            <strong>Chirag Ahir</strong><br>
-                            <small class="text-muted">admin@gmail.com</small>
-                        </li>
-
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item" href="profile.php">
-                                <i class="bi bi-person me-2"></i>
-                                My Profile
-                            </a>
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item" href="settings.php">
-                                <i class="bi bi-gear me-2"></i>
-                                Settings
-                            </a>
-                        </li>
-
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item text-danger" href="logout.php">
-                                <i class="bi bi-box-arrow-right me-2"></i>
-                                Logout
-                            </a>
-                        </li>
-
-                    </ul>
-                </div>
-
-
-            </div>
-
-        </div>
-    </nav>
-
-
-    <div class="content">
-        <div class="container-fluid">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h3 class="fw-bold">Welcome Back, Admin</h3>
-        </div>
-    </div>
-
-    <div class="row g-4 mb-4">
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 p-2">
-                <div class="card-body d-flex align-items-center">
-                    <div class="flex-shrink-0 bg-primary-subtle text-primary p-3 rounded-3 me-3">
-                        <i class="bi bi-people-fill fs-3"></i>
-                    </div>
-                    <div>
-                        <h6 class="text-muted mb-1">Total Users</h6>
-                        <h3 class="fw-bold mb-0">1,240</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 p-2">
-                <div class="card-body d-flex align-items-center">
-                    <div class="flex-shrink-0 bg-success-subtle text-success p-3 rounded-3 me-3">
-                        <i class="bi bi-currency-dollar fs-3"></i>
-                    </div>
-                    <div>
-                        <h6 class="text-muted mb-1">Total Kamani</h6>
-                        <h3 class="fw-bold mb-0">45000</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm rounded-4 p-2">
-                <div class="card-body d-flex align-items-center">
-                    <div class="flex-shrink-0 bg-warning-subtle text-warning p-3 rounded-3 me-3">
-                        <i class="bi bi-cart-check fs-3"></i>
-                    </div>
-                    <div>
-                        <h6 class="text-muted mb-1">Orders</h6>
-                        <h3 class="fw-bold mb-0">158</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <ul class="nav flex-column">
+        <li><a href="home.html" class="nav-link"><i class="bi bi-house"></i><span class="link-text">Home</span></a></li>
+        <li><a href="customer.html" class="nav-link"><i class="bi bi-people"></i><span class="link-text">Customers</span></a></li>
+        <li><a href="product.html" class="nav-link"><i class="bi bi-box"></i><span class="link-text">Products</span></a></li>
+        <li><a href="order.html" class="nav-link"><i class="bi bi-cart"></i><span class="link-text">Orders</span></a></li>
+        <li><a href="offer.html" class="nav-link"><i class="bi bi-tag"></i><span class="link-text">Offers</span></a></li>
+        <li><a href="payment.html" class="nav-link"><i class="bi bi-credit-card"></i><span class="link-text">Payments</span></a></li>
+        <li><a href="notification.html" class="nav-link"><i class="bi bi-bell"></i><span class="link-text">Notifications</span></a></li>
+        <li class="mt-4"><a href="login.html" class="nav-link text-danger"><i class="bi bi-box-arrow-left"></i><span class="link-text">Logout</span></a></li>
+    </ul>
 </div>
+
+<!-- NAVBAR -->
+<nav class="navbar sticky-top shadow-sm" id="navbar">
+<div class="container-fluid">
+
+<div class="d-flex gap-2">
+<button class="btn btn-light border" id="toggle-btn">
+<i class="bi bi-list"></i>
+</button>
+<input class="form-control d-none d-lg-block" placeholder="Search..." style="max-width:250px;">
+</div>
+
+<div class="d-flex gap-3 align-items-center">
+
+<button class="btn btn-light border" id="darkBtn">
+<i class="bi bi-moon-stars"></i>
+</button>
+
+<div class="dropdown">
+<button class="btn p-0 border-0 bg-transparent dropdown-toggle" data-bs-toggle="dropdown">
+<img src="sandiyo.jpg" width="40" height="40" class="rounded-circle border">
+</button>
+
+<ul class="dropdown-menu dropdown-menu-end shadow">
+<li class="px-3 py-2">
+<strong>Chirag Ahir</strong><br>
+<small class="text-muted">admin@gmail.com</small>
+</li>
+<hr>
+<li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+<li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+</ul>
+</div>
+
+</div>
+</div>
+</nav>
+
+<!-- CONTENT -->
+<div class="content">
+<div class="container-fluid">
+
+<h3 class="fw-bold mb-4">Welcome Back, Admin</h3>
+
+<div class="row g-4">
+<div class="col-md-3">
+<div class="card shadow-sm p-3">
+<h6>Total Users</h6>
+<h3>1,240</h3>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card shadow-sm p-3">
+<h6>Total Revenue</h6>
+<h3>45,000</h3>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card shadow-sm p-3">
+<h6>Orders</h6>
+<h3>158</h3>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- BOOTSTRAP JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+
 const sidebar = document.getElementById('sidebar');
 const navbar = document.getElementById('navbar');
 const content = document.querySelector('.content');
 const toggleBtn = document.getElementById('toggle-btn');
-const darkBtnIcon = document.querySelector('[onclick="toggleDark()"] i');
+const darkBtn = document.getElementById('darkBtn');
+const darkIcon = darkBtn.querySelector("i");
 
-/* ================= RESTORE THEME ================= */
-
-(function() {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-        document.body.classList.add("dark-mode");
-        if (darkBtnIcon) darkBtnIcon.className = "bi bi-sun";
-    }
-})();
-
-/* ================= MENU TOGGLE ================= */
-
-if (toggleBtn && sidebar) {
-    toggleBtn.addEventListener('click', () => {
-
-        // mobile
-        if (window.innerWidth < 992) {
-            sidebar.classList.toggle('mobile-show');
-            return;
-        }
-
-        // desktop
-        sidebar.classList.toggle('collapsed');
-        navbar && navbar.classList.toggle('collapsed-margin');
-        content && content.classList.toggle('collapsed-margin');
-    });
+/* restore theme */
+if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark-mode");
+    darkIcon.className = "bi bi-sun";
 }
 
-/* ================= AUTO CLOSE MOBILE SIDEBAR ================= */
+/* sidebar toggle */
+toggleBtn.onclick = () => {
+    if (window.innerWidth < 992) {
+        sidebar.classList.toggle('mobile-show');
+        return;
+    }
+    sidebar.classList.toggle('collapsed');
+    navbar.classList.toggle('collapsed-margin');
+    content.classList.toggle('collapsed-margin');
+};
 
-document.querySelectorAll('.sidebar .nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-        if (window.innerWidth < 992 && sidebar) {
-            sidebar.classList.remove('mobile-show');
-        }
-    });
+/* dark toggle */
+darkBtn.onclick = () => {
+    document.body.classList.toggle("dark-mode");
+    if (document.body.classList.contains("dark-mode")) {
+        localStorage.setItem("theme","dark");
+        darkIcon.className = "bi bi-sun";
+    } else {
+        localStorage.setItem("theme","light");
+        darkIcon.className = "bi bi-moon-stars";
+    }
+};
+
+/* active menu auto */
+const current = location.pathname.split("/").pop();
+document.querySelectorAll(".sidebar .nav-link").forEach(link=>{
+    if(link.getAttribute("href") === current){
+        link.classList.add("active");
+    }
 });
 
-/* ================= DARK MODE TOGGLE ================= */
-
-function toggleDark() {
-    document.body.classList.toggle('dark-mode');
-
-    if (document.body.classList.contains('dark-mode')) {
-        localStorage.setItem("theme", "dark");
-        if (darkBtnIcon) darkBtnIcon.className = "bi bi-sun";
-    } else {
-        localStorage.setItem("theme", "light");
-        if (darkBtnIcon) darkBtnIcon.className = "bi bi-moon-stars";
-    }
+/* click outside close mobile */
+document.addEventListener("click", e=>{
+if(window.innerWidth < 992 &&
+sidebar.classList.contains("mobile-show") &&
+!sidebar.contains(e.target) &&
+!toggleBtn.contains(e.target)){
+sidebar.classList.remove("mobile-show");
 }
+});
 
-/* ================= WINDOW RESIZE FIX ================= */
-
-window.addEventListener('resize', () => {
-    if (window.innerWidth >= 992 && sidebar) {
-        sidebar.classList.remove('mobile-show');
-    }
 });
 </script>
 
-</div>
 </body>
-
 </html>
